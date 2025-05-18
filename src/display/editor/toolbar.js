@@ -200,6 +200,7 @@ class HighlightToolbar {
     editToolbar.append(buttons);
 
     this.#addHighlightButton();
+    this.#addLookupButton();
 
     return editToolbar;
   }
@@ -254,8 +255,28 @@ class HighlightToolbar {
     button.addEventListener("contextmenu", noContextMenu, { signal });
     button.addEventListener(
       "click",
+      () => {this.#uiManager.highlightSelection("floating_button");
+      },
+      { signal }
+    );
+    this.#buttons.append(button);
+  }
+
+  #addLookupButton() {
+    const button = document.createElement("button");
+    button.className = "lookupButton";
+    button.tabIndex = 0;
+    button.setAttribute("data-l10n-id", `pdfjs-highlight-floating-button1`);
+    const span = document.createElement("span");
+    button.append(span);
+    span.className = "visuallyHidden";
+    span.setAttribute("data-l10n-id", "pdfjs-highlight-floating-button-label");
+    const signal = this.#uiManager._signal;
+    button.addEventListener("contextmenu", noContextMenu, { signal });
+    button.addEventListener(
+      "click",
       () => {
-        this.#uiManager.highlightSelection("floating_button");
+        this.#uiManager.lookupSelection("floating_button");
       },
       { signal }
     );

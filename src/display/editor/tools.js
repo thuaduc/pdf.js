@@ -1144,6 +1144,36 @@ class AnnotationEditorUIManager {
     callback();
   }
 
+  lookupSelection() {
+    const selection = document.getSelection();
+    if (!selection || selection.isCollapsed) {
+      return;
+    }
+
+    const text = selection.toString().trim();
+    if (!text) return;
+
+    const anchorElement = this.#getAnchorElementForSelection(selection);
+    const textLayer = anchorElement.closest(".textLayer");
+    const boxes = this.getSelectionBoxes(textLayer);
+    if (!boxes) {
+      return;
+    }
+
+    const rect = boxes[0]?.getBoundingClientRect?.() || boxes[0];
+
+    selection.empty();
+
+    this.#showMeaningPopup(text, this.#lookupWordMeaning(text), rect);
+  }
+
+  #lookupWordMeaning(word) {
+    return "Meaning of " + word;
+  }
+
+  #showMeaningPopup(word, meaning, rect) {
+  }
+
   #displayHighlightToolbar() {
     const selection = document.getSelection();
     if (!selection || selection.isCollapsed) {
